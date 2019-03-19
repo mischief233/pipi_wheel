@@ -49,10 +49,12 @@ plt.show()
 #空缺值填补
 #空缺值比例(axis=0行，1列
 data.isnull().sum()
-data.notnull().sun(axis=0)/data.shape[0]
+data.notnull().sum(axis=0)/data.shape[0]
 #删除
 del data['a']
 data.drop(['a','b',axis=1], inplace = True)
+#删除空缺行0，列1
+df.dropna(axis=0, how='any', inplace=True)
 #常规填补
 data['a'].fillna('0', inplace = True)
 data['a'].fillna(data['a'].mean(), inplace = True)
@@ -128,11 +130,11 @@ dataset['FamilySize'] = dataset ['SibSp'] + dataset['Parch']
 #筛选
 dataset['IsAlone'].loc[dataset['FamilySize'] > 1] = 0
 #提取
-data.iloc([0],[0])#position
-data.loc([0],['a'])#label
+data.iloc[[0],[0]]#position
+data.loc[[0],['a']]#label
 data.ix(2)#all
-data.ix(:,'a')
-data.ix(1,'a')
+data.ix[:,'a']
+data.ix[1,'a']
 #字符分割
 dataset['Title'] = dataset['Name'].str.split(", ", expand=True)[1].str.split(".", expand=True)[0]
 #分箱（qcut等量，cut等距，数字为份数）
@@ -143,3 +145,17 @@ data1_x_dummy = data1_dummy.columns.tolist()
 #返回序列标签和值
 for index, value in enumerate(seq):
     print(index, value)
+#列表去重
+set1=list(set(list1))
+#数据更新
+data.ix[data['bf_policy']!='共青团员','bf_policy']='群众'
+a = data[data['bf_policy'] != '共青团员']
+#改名
+a.rename(columns={'A':'a', 'C':'c'}, inplace = True)
+#数据类型转换
+a['mes_TestID'] = a['mes_TestID'].astype("int")
+#计数
+abnormal = abnor_df.groupby(['bf_StudentID','mes_sub_id','mes_sub_name']).mes_Score.value_counts()
+#循环行列
+for i,row in df1.iterrows():
+    print(str(row['mes_sub_name'])+'王子')
