@@ -4,47 +4,62 @@ Created on Fri May 18 19:20:56 2018
 
 @author: jinqiu
 """
-
-
-import re
+#导入库
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import sklearn
+import datetime
+import time
 import seaborn as sns
-
 import warnings
 warnings.filterwarnings('ignore')
+sns.set_style('white')
+import csv
 
-creditdata = pd.read_excel('C:/Users/wayne/Desktop/creditdata.xlsx')
-del creditdata['ID']
+#导入
+df = pd.read_csv(r'C:/Users/wayne/Desktop/contest/all2.csv' )
+train_label = pd.read_csv(r'C:/Users/wayne/Desktop/contest/train_label.csv')
+all = pd.read_csv(r'C:/Users/wayne/Desktop/contest/alldata1.txt')
+test = pd.read_table(r'C:/Users/wayne/Desktop/contest/test.txt',sep='|',names=['uid','worldid'], header=None)
 
-lable = creditdata.iloc[:,-1]
-del creditdata['Class']
-from sklearn import preprocessing
-data1 = preprocessing.StandardScaler().fit(creditdata).transform(creditdata)
-data2 = pd.DataFrame(data1,columns=creditdata.columns)
-train = pd.concat([data2,lable],axis=1)
+#数据类型
+df.loc[df['Elo_change'] =='\\N'] = 0
+df['Elo_change'] = df['Elo_change'].astype("int")
 
-train = creditdata.iloc[0:284726,:]
-test = creditdata.iloc[284727:284807,:]
+ab = df[df['label']==1]
+#比例
+a = c['label'].value_counts()
+bili = a[1]/a[0]
 
-plt.figure(figsize=(12,5))
-plt.subplot(121)
-creditdata['V1'].hist(bins=70)
-plt.xlabel('V1')
-plt.ylabel('Num')
+df.head()
+del df['game_mode']
 
-plt.subplot(122)
-train.boxplot(column='V1', showfliers=False)
-plt.show()
+#绘图
+sns.countplot(x='Premade_size',data = df)
+plt.savefig('ex_flag.png')
 
-facet = sns.FacetGrid(train, hue="Class",aspect=3)
-facet.map(sns.kdeplot,'Amount',shade= True)
-facet.set(xlim=(min(), train['Amount'].max()))
+sns.distplot(ab['Elo_change'])
+
+sns.boxplot(ab['Elo_change'])
+
+facet = sns.FacetGrid(df, hue="label",aspect=4)
+facet.map(sns.kdeplot,'Elo_change',shade= True)
+facet.set(xlim=(0, df['Elo_change'].max()))
 facet.add_legend()
 
-creditdata['Fare_bin'] = pd.qcut(creditdata['Fare'], 5)
-creditdata['Fare_bin'].head()
+b = df[df['Premade']!=false]
+c= train[train['Elo_change']>30]
+d= ab[ab['Elo_change']>30]
+e = ab['ext_flag'].value_counts().rank()
 
-train.to_csv('C:/Users/wayne/Desktop/train.csv')
-test.to_csv('C:/Users/wayne/Desktop/test.csv')
+#格式转换
+df['flag'] = pd.DataFrame(list(map(lambda x: hex(x),df['flag'])))
+all['flag'] = pd.DataFrame(list(map(lambda x: hex(x),all['flag'])))
+df['ext_flag'] = pd.DataFrame(list(map(lambda x: hex(x),df['ext_flag'])))
+all['ext_flag'] = pd.DataFrame(list(map(lambda x: hex(x),all['ext_flag'])))
+
+
+ab.to_csv("C:/Users/wayne/Desktop/contest/ab.txt",index=False,sep=',')
+df.to_csv("C:/Users/wayne/Desktop/contest/train1.txt",index=False,sep=',')
+all.to_csv("C:/Users/wayne/Desktop/contest/alldata1.txt",index=False,sep=',')

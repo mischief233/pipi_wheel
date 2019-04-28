@@ -159,3 +159,7 @@ abnormal = abnor_df.groupby(['bf_StudentID','mes_sub_id','mes_sub_name']).mes_Sc
 #循环行列
 for i,row in df1.iterrows():
     print(str(row['mes_sub_name'])+'王子')
+
+#名字列表
+name1 = (np.array(name1).T)[0].tolist()
+name1 = df.columns.tolist()
